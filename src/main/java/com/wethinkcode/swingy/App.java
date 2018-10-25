@@ -24,6 +24,6 @@ public class App {
 
         Integer _heroCount = _Database.countHeroes();
 
-        _ViewController.Menu(_heroCount);
+        _ViewController.Start(_heroCount);
     }
 }

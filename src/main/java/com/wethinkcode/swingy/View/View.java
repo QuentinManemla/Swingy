@@ -1,5 +1,7 @@
 package com.wethinkcode.swingy.View;
 
+import javafx.scene.paint.Color;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -8,16 +10,20 @@ import java.io.InputStreamReader;
 
 public class View {
     public static BufferedReader _bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    public static JPanel _MenuPanel = new JPanel();
 
     public View(Boolean console, JFrame _Frame) {
+        _MenuPanel.setBounds(200, 10, 400, 200);
+        _MenuPanel.setBackground(java.awt.Color.gray);
         if (console) {
             System.out.println("[ Swingy ]: Welcome to Swingy!");
         } else {
             JLabel _welcomeLabel = new JLabel("Welcome to Swingy");
-            _welcomeLabel.setBounds(340, 0, 200, 100);
+            _welcomeLabel.setBounds(0, 0, 200, 30);
 
-            _Frame.add(_welcomeLabel);
+            _MenuPanel.add(_welcomeLabel);
         }
+        _Frame.add(_MenuPanel);
     }
 
     public int ConsoleMenu(Integer heroCount) {
@@ -41,10 +47,10 @@ public class View {
         return (1);
     }
 
-    public void GUIMenu(Integer heroCount, JFrame _Frame, ActionListener _createHeroAL) {
+    public void GUIMenu(Integer heroCount, JFrame _Frame, ActionListener _createHeroAL, ActionListener _selectHeroAL) {
         JLabel _heroCount = new JLabel("Previously Created Heroes: " + heroCount);
         _heroCount.setBounds(310, 50, 250, 30);
-        _Frame.add(_heroCount);
+        _MenuPanel.add(_heroCount);
 
         JButton _createHero = new JButton("Create a New Hero");
         JButton _selectHero = new JButton("Select a Previously Created Hero");
@@ -53,8 +59,9 @@ public class View {
         _selectHero.setBounds(280, 120, 250, 30);
 
         _createHero.addActionListener(_createHeroAL);
-        _Frame.add(_createHero);
-        _Frame.add(_selectHero);
+        _selectHero.addActionListener(_selectHeroAL);
+        _MenuPanel.add(_createHero);
+        _MenuPanel.add(_selectHero);
     }
 
     public void updateGui(JFrame _Frame) {
