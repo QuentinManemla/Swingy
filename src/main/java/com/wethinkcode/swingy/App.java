@@ -1,15 +1,14 @@
 package com.wethinkcode.swingy;
 
 import com.wethinkcode.swingy.Database.Database;
-import com.wethinkcode.swingy.View.ViewController;
+import com.wethinkcode.swingy.View.Controller;
 
 /**
  * Main App Class
  */
 
 public class App {
-    private static ViewController _ViewController;
-    private static Database _Database = new Database();
+    private static Controller _Controller;
 
     public static void main( String[] args ) {
         if( args.length == 0 || args.length > 1) {
@@ -18,12 +17,10 @@ public class App {
         }
         /* Setup the Initial View of the Project */
         if ( args[0].equals("console") )
-            _ViewController = new ViewController(true);
+            _Controller = new Controller(true);
         else if ( args[0].equals("gui") )
-            _ViewController = new ViewController(false);
+            _Controller = new Controller(false);
 
-        Integer _heroCount = _Database.countHeroes();
-
-        _ViewController.Start(_heroCount);
+        _Controller.Start();
     }
 }

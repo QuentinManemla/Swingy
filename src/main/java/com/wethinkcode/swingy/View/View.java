@@ -1,5 +1,6 @@
 package com.wethinkcode.swingy.View;
 
+import com.wethinkcode.swingy.Database.Database;
 import javafx.scene.paint.Color;
 
 import javax.swing.*;
@@ -13,15 +14,15 @@ public class View {
     public static JPanel _MenuPanel = new JPanel();
 
     public View(Boolean console, JFrame _Frame) {
-        _MenuPanel.setBounds(200, 10, 400, 200);
+        _MenuPanel.setBounds(250, 0, 300, 200);
         _MenuPanel.setBackground(java.awt.Color.gray);
         if (console) {
             System.out.println("[ Swingy ]: Welcome to Swingy!");
         } else {
-            JLabel _welcomeLabel = new JLabel("Welcome to Swingy");
-            _welcomeLabel.setBounds(0, 0, 200, 30);
-
-            _MenuPanel.add(_welcomeLabel);
+//            JLabel _welcomeLabel = new JLabel("Welcome to Swingy");
+//            _welcomeLabel.setBounds(300, 10, 300, 30);
+//
+//            _MenuPanel.add(_welcomeLabel);
         }
         _Frame.add(_MenuPanel);
     }
@@ -49,14 +50,17 @@ public class View {
 
     public void GUIMenu(Integer heroCount, JFrame _Frame, ActionListener _createHeroAL, ActionListener _selectHeroAL) {
         JLabel _heroCount = new JLabel("Previously Created Heroes: " + heroCount);
-        _heroCount.setBounds(310, 50, 250, 30);
+        _heroCount.setBounds(0, 0, 200, 30);
         _MenuPanel.add(_heroCount);
 
         JButton _createHero = new JButton("Create a New Hero");
         JButton _selectHero = new JButton("Select a Previously Created Hero");
 
         _createHero.setBounds(280, 90, 250, 30);
+        _createHero.setBorderPainted(false);
+
         _selectHero.setBounds(280, 120, 250, 30);
+        _selectHero.setBorderPainted(false);
 
         _createHero.addActionListener(_createHeroAL);
         _selectHero.addActionListener(_selectHeroAL);
@@ -65,8 +69,12 @@ public class View {
     }
 
     public void updateGui(JFrame _Frame) {
-        _Frame.setSize(800, 600);
         _Frame.setLayout(null);
         _Frame.setVisible(true);
+    }
+
+    public void removeMenuPanel(JFrame _Frame) {
+        _Frame.remove(_MenuPanel);
+        _Frame.repaint();
     }
 }
