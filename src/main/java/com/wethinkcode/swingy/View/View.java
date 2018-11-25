@@ -1,7 +1,5 @@
 package com.wethinkcode.swingy.View;
 
-import com.wethinkcode.swingy.Database.Database;
-import javafx.scene.paint.Color;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
