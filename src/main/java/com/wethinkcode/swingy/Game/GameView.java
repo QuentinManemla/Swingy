@@ -5,7 +5,7 @@ import com.wethinkcode.swingy.Hero.Hero;
 import javax.swing.*;
 
 public class GameView {
-    public static JPanel _MapPanel = new JPanel();
+    public static JPanel _MapPanel = null;
     int panel_y = 10;
     int panel_x = 100;
 
@@ -20,10 +20,15 @@ public class GameView {
                 System.out.print("\n");
             }
         } else {
-            _MapPanel.setBounds(200, 10, 300, 600);
-            _MapPanel.setBackground(java.awt.Color.gray);
-            _MainFrame.add(_MapPanel);
+            if (_MapPanel == null) {
+                _MapPanel = new JPanel();
+                _MapPanel.setBounds(200, 10, 300, 600);
+                _MapPanel.setBackground(java.awt.Color.gray);
+                _MainFrame.add(_MapPanel);
+            }
 
+            panel_y = 10;
+            panel_x = 100;
             for(int y = 0; y < _Map.length; y++) {
                 String [] Line = _Map[y];
                 for (int x = 0; x < _Map.length; x++) {
@@ -42,8 +47,8 @@ public class GameView {
     public void GuiMovement(Hero _Hero, JTextField _directionTextField, JFrame _MainFrame) {
         JLabel _DirectionsLabel = new JLabel("Enter your Desired Direction");
         JLabel Directions = new JLabel("1 - North | 2 - South | 3 - East | 4 - West");
-        _DirectionsLabel.setBounds(100, panel_y += 50, 300, 10);
-        Directions.setBounds(60, panel_y += 15, 400, 10);
+        _DirectionsLabel.setBounds(50, panel_y += 50, 300, 10);
+        Directions.setBounds(30, panel_y += 15, 400, 10);
 
         _directionTextField.setBounds(70, panel_y += 15, 200, 20);
 
@@ -51,6 +56,12 @@ public class GameView {
         _MapPanel.add(Directions);
         _MapPanel.add(_DirectionsLabel);
 
+        panel_y = 10;
         _MainFrame.repaint();
+    }
+
+    public void RemovePanel(JFrame _MainFrame) {
+        _MapPanel.removeAll();
+        _MapPanel.repaint();
     }
 }

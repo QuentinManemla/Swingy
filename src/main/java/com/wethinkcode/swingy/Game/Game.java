@@ -1,9 +1,7 @@
 package com.wethinkcode.swingy.Game;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.wethinkcode.swingy.Hero.Hero;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-import sun.security.tools.keytool.Main;
+import sun.tools.jar.Main;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,58 +9,135 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Random;
 
+@SuppressWarnings("IntegerDivisionInFloatingPointContext")
 public class Game {
-    public static GameView _GameView = new GameView();
-    public static BufferedReader _bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-    public static Integer _mapDimensions;
-    public String[][] _Map;
-    public static Integer _HeroX;
-    public static Integer _HeroY;
-    public boolean complete = false;
-    public JTextField _directionTextField = new JTextField();
-
-    // Direction Action Listiners
-    ActionListener _DirectionAL = new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                Integer direction = Integer.parseInt(_directionTextField.getText());
-                if (direction.equals(1))
-                    _HeroY -= 1;
-                else if (direction.equals(2))
-                    _HeroY += 1;
-                else if (direction.equals(3))
-                    _HeroX += 1;
-                else if (direction.equals(4))
-                    _HeroX -= 1;
-            } catch (NumberFormatException ex ) {
-                System.out.println("Incorrect Number");
-            }
-        }
-    };
+    private static GameView _GameView = new GameView();
+    private static BufferedReader _bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    private static JFrame MainFrame;
+    private static Boolean Console;
+    private static Hero Hero;
+    private String[][] _Map;
+    public int[][] enemies;
+    private static Integer _HeroX;
+    private static Integer _HeroY;
+    private boolean complete;
+    private JTextField _directionTextField = new JTextField();
 
     public Game(Boolean _console, Hero _Hero, JFrame _MainFrame) {
-        _mapDimensions = (_Hero.getLevel() - 1) * 5 + 10 - (_Hero.getLevel() % 2);
+        MainFrame = _MainFrame;
+        Console = _console;
+        Hero = _Hero;
+
+        int _mapDimensions = (Hero.getLevel() - 1) * 5 + 10 - (Hero.getLevel() % 2);
         _Map = new String[_mapDimensions][_mapDimensions];
         _HeroX = Math.round(_mapDimensions / 2) + 1;
         _HeroY = Math.round(_mapDimensions / 2) + 1;
 
-        System.out.println("Hero X: " + _HeroX);
-        System.out.println("Hero Y: " + _HeroY);
+        System.out.println("Map Dimensions: " + _mapDimensions);
+        System.out.println("Enemies: " + Math.round((_mapDimensions * _mapDimensions) * 0.4));
+        int enemiestemp = (int) Math.round((_mapDimensions * _mapDimensions) * 0.4);
+        enemies = new int[enemiestemp][enemiestemp];
+
         for (int y = 0; y < _Map.length; y++) {
-            String[] Line = _Map[y];
             for (int x = 0; x < _Map.length; x++) {
                 _Map[x][y] = " * ";
             }
         }
+
         _HeroX = Math.round(_mapDimensions / 2);
         _HeroY = Math.round(_mapDimensions / 2);
-        _Map[_HeroY][_HeroX] = " P ";
+        _Map[_HeroX][_HeroY] = " P ";
+
+        Random rand = new Random();
+
+        int limit = (_mapDimensions-1);
+        for (int y = 0; y < enemies.length; y++) {
+            int randx = 0 + rand.nextInt((limit - 0) + 1);
+            int randy = 0 + rand.nextInt((limit - 0) + 1);
+
+            System.out.println("Placing Enemy " + y + " at Position: " + randx + " " + randy);
+            if (randx != _HeroX && randy != _HeroY) {
+                _Map[randx][randy] = " E ";
+            }
+        }
+
+        // Direction Action Listiner
+        ActionListener _DirectionAL = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    _Map[_HeroX][_HeroY] = " * ";
+                    Integer direction = Integer.parseInt(_directionTextField.getText());
+                    if (direction.equals(1))
+                        _HeroY -= 1;
+                    else if (direction.equals(2))
+                        _HeroY += 1;
+                    else if (direction.equals(3))
+                        _HeroX += 1;
+                    else if (direction.equals(4))
+                        _HeroX -= 1;
+                    _directionTextField.setText("");
+                    _Map[_HeroX][_HeroY] = " P ";
+                    _GameView.RemovePanel(MainFrame);
+                    GameLoop();
+                } catch (NumberFormatException ex) {
+                    System.out.println("Incorrect Number");
+                    _Map[_HeroX][_HeroY] = " P ";
+                    _directionTextField.setText("");
+                    _GameView.RemovePanel(MainFrame);
+                    GameLoop();
+                }
+            }
+        };
         _directionTextField.addActionListener(_DirectionAL);
-        GameLoop(_console, _Hero, _MainFrame);
+        complete = false;
     }
 
-    public void ProcessMovement(Hero _Hero) {
+    private void win() {
+
+    }
+
+    private void enemyFight() {
+        Random rand = new Random();
+
+        int enemyAttack = Hero.getLevel() + 2;
+
+        if (Hero.getDefense() > 1)
+            enemyAttack += (Hero.getDefense() / 2);
+        if (Hero.getAttack() > 1)
+            enemyAttack += (Hero.getAttack() / 2);
+
+        if (rand.nextInt(100) < 75) {
+            win();
+        } else {
+            System.out.println("Death");
+        }
+        System.out.println("Enemy Attack = " + enemyAttack);
+    }
+
+    private void enemyCollision() {
+        System.out.println("[Swingy :] You have Come in Contact with an Enemy, You have two options");
+        System.out.print("1: Run\n2: Fight\n");
+        System.out.print("Your Choice: -> ");
+
+        try {
+            Integer choice = Integer.parseInt(_bufferedReader.readLine());
+
+            if (choice.equals(1)) {
+
+            } else if (choice.equals(2))
+                enemyFight();
+        } catch ( IOException ex ) {
+            System.out.println("[Swingy] IO Exception [Game - Enemy Collision]");
+            enemyCollision();
+        } catch (NumberFormatException ex) {
+            System.out.println("[Swingy] Number Format Exception [Game - Enemy Collision]");
+            enemyCollision();
+        }
+    }
+
+    private void ProcessMovement() {
         System.out.println("[Swingy: ] Select Movement Direction");
         System.out.print("1: North\n2: South\n3: East\n4: West\n");
         System.out.print("Direction: -> ");
@@ -81,27 +156,34 @@ public class Game {
                 _HeroX -= 1;
             else {
                 System.out.println("[Swingy] Unknown Option");
-                ProcessMovement(_Hero);
+                ProcessMovement();
             }
         } catch (IOException ex ) {
             System.out.println("[Swingy] IO Exception [Game - Proccess Movement]");
-            ProcessMovement(_Hero);
+            ProcessMovement();
         } catch ( NumberFormatException ex ) {
             System.out.println("[Swingy] Number Format Exception [Game - Proccess Movement]");
-            ProcessMovement(_Hero);
+            ProcessMovement();
         }
     }
-    public void GameLoop(Boolean _Console, Hero _Hero, JFrame _MainFrame) {
-           _GameView.DisplayMap(_Console, _Map, _MainFrame);
-           if (_Console) {
-               ProcessMovement(_Hero);
+
+    public void GameLoop() {
+           _GameView.DisplayMap(Console, _Map, MainFrame);
+           if (Console) {
+               ProcessMovement();
                if (_HeroY > 0 && _HeroX > 0) {
-                   _Map[_HeroX][_HeroY] = " P ";
+                   if (_Map[_HeroX][_HeroY] == " E ") {
+                       System.out.println("You come in contact with an Enemy");
+                       _Map[_HeroX][_HeroY] = " P ";
+                       enemyCollision();
+                   } else {
+                       _Map[_HeroX][_HeroY] = " P ";
+                   }
                }
                if (!complete)
-                   GameLoop(_Console, _Hero, _MainFrame);
+                   GameLoop();
            } else {
-               _GameView.GuiMovement(_Hero, _directionTextField, _MainFrame);
+               _GameView.GuiMovement(Hero, _directionTextField, MainFrame);
            }
     }
 }
