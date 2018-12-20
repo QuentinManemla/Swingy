@@ -1,5 +1,7 @@
 package com.wethinkcode.swingy.Hero;
 
+import com.wethinkcode.swingy.Artifact.Artifact;
+import com.wethinkcode.swingy.Artifact.ArtifactController;
 import com.wethinkcode.swingy.Database.Database;
 
 import javax.swing.*;
@@ -11,6 +13,7 @@ import java.util.Random;
 
 public class HeroController {
     public static HeroView _HeroView = new HeroView();
+    public static ArtifactController _ArtifactController = new ArtifactController();
     public static BufferedReader _bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
     public HeroController() {
@@ -102,10 +105,27 @@ public class HeroController {
 
         if (rand.nextInt(100) < 75) {
             _Hero.setExperience(_Hero.getExperience() + (enemyAttack * 100));
-            upgradeHero(_Hero);
+            if (upgradeHero(_Hero))
+                System.out.println("[Swingy] - Hero " + _Hero.getName() + " Has leveled up");
+            _ArtifactController.dropArtifact(_Hero);
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void setArfifact(Artifact _Artifact, Hero _Hero) {
+        if (_Hero.HeroArtifact == null) {
+            if (_Artifact.getName() == "Sword")
+                _Hero.setHitPoints(_Hero.getHitPoints() + _Artifact.getValue());
+            else if (_Artifact.getName() == "Shield")
+                _Hero.setDefense(_Hero.getDefense() + _Artifact.getValue());
+        } else {
+            if (_Artifact.getName() == "Sword")
+                _Hero.setHitPoints(_Hero.getHitPoints() - _Artifact.getValue());
+            else if (_Artifact.getName() == "Shield")
+                _Hero.setDefense(_Hero.getDefense() - _Artifact.getValue());
+            _Hero.HeroArtifact = null;
         }
     }
 

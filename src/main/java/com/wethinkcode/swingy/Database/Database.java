@@ -50,6 +50,25 @@ public class Database {
         return null;
     }
 
+    public void updateHero(Hero _Hero) {
+        PreparedStatement pstmt = null;
+        try {
+            String SQL = "UPDATE heroes SET level = ? ,experience = ?, attack = ?, defense = ?, hitpoints = ? WHERE id  = ?";
+            pstmt = this.Con.prepareStatement(SQL);
+            pstmt.setInt(1, _Hero.getLevel());
+            pstmt.setInt(2, _Hero.getExperience());
+            pstmt.setInt(3, _Hero.getAttack());
+            pstmt.setInt(4, _Hero.getDefense());
+            pstmt.setInt(5, _Hero.getHitPoints());
+            pstmt.setInt(6, _Hero.getId());
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Error: unable to Run Prepared Statement: " + ex);
+            System.exit(1);
+        }
+    }
     public Hero getHero(Integer _heroId) {
         PreparedStatement pstmt = null;
         try {

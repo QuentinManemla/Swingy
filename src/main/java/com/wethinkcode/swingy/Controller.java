@@ -79,10 +79,12 @@ public class Controller {
                 _ActiveHero = _HeroController.createHero(_Console);
                 set_Game(new Game(_Console, _ActiveHero, MainFrame));
                 _Game.GameLoop();
+                _Database.updateHero(_ActiveHero);
             } else if ( _option.equals(2) ) {
                 _ActiveHero = _HeroController.previousHero(_Database, _Console, MainFrame, _heroIdField);
                 set_Game(new Game(_Console, _ActiveHero, MainFrame));
                 _Game.GameLoop();
+                _Database.updateHero(_ActiveHero);
             } else {
                 System.out.println("Selected Option is Invalid");
                 Start();

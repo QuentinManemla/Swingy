@@ -25,6 +25,7 @@ public class Game {
     private static Integer _HeroX;
     private static Integer _HeroY;
     private boolean complete;
+    private int _mapDimensions;
     private JTextField _directionTextField = new JTextField();
 
     public Game(Boolean _console, Hero _Hero, JFrame _MainFrame) {
@@ -32,7 +33,7 @@ public class Game {
         Console = _console;
         Hero = _Hero;
 
-        int _mapDimensions = (Hero.getLevel() - 1) * 5 + 10 - (Hero.getLevel() % 2);
+        _mapDimensions = (Hero.getLevel() - 1) * 5 + 10 - (Hero.getLevel() % 2);
         _Map = new String[_mapDimensions][_mapDimensions];
         _HeroX = Math.round(_mapDimensions / 2) + 1;
         _HeroY = Math.round(_mapDimensions / 2) + 1;
@@ -59,7 +60,6 @@ public class Game {
             int randx = 0 + rand.nextInt((limit - 0) + 1);
             int randy = 0 + rand.nextInt((limit - 0) + 1);
 
-            System.out.println("Placing Enemy " + y + " at Position: " + randx + " " + randy);
             if (randx != _HeroX && randy != _HeroY) {
                 _Map[randx][randy] = " E ";
             }
@@ -121,9 +121,9 @@ public class Game {
         }
     }
 
-    private void ProcessMovement() {
+    private boolean ProcessMovement() {
         System.out.println("[Swingy: ] Select Movement Direction");
-        System.out.print("1: North\n2: South\n3: East\n4: West\n");
+        System.out.print("1: North\n2: South\n3: East\n4: West\n5: Exit Game\n");
         System.out.print("Direction: -> ");
 
         try {
@@ -138,10 +138,13 @@ public class Game {
                 _HeroX += 1;
             else if (direction.equals(4))
                 _HeroX -= 1;
+            else if (direction.equals(5))
+                return false;
             else {
                 System.out.println("[Swingy] Unknown Option");
                 ProcessMovement();
             }
+            return true;
         } catch (IOException ex ) {
             System.out.println("[Swingy] IO Exception [Game - Proccess Movement]");
             ProcessMovement();
@@ -149,23 +152,27 @@ public class Game {
             System.out.println("[Swingy] Number Format Exception [Game - Proccess Movement]");
             ProcessMovement();
         }
+        return false;
     }
 
     public void GameLoop() {
            _GameView.DisplayMap(Console, _Map, MainFrame);
            if (Console) {
-               ProcessMovement();
-               if (_HeroY > 0 && _HeroX > 0) {
+               if(ProcessMovement()) {
                    if (_Map[_HeroX][_HeroY] == " E ") {
                        System.out.println("You come in contact with an Enemy");
                        _Map[_HeroX][_HeroY] = " P ";
                        enemyCollision();
                    } else {
-                       _Map[_HeroX][_HeroY] = " P ";
+                       System.out.println("Hero X: " + _HeroX + " Hero Y: " + _HeroY);
+                       if (_HeroX.equals(_mapDimensions - 1) || _HeroY.equals(_mapDimensions - 1) || _HeroX.equals(0)
+                               || _HeroY.equals(0))
+                           System.out.println("[Swingy]: You have won the Game");
+                       else
+                           _Map[_HeroX][_HeroY] = " P ";
                    }
-               }
-               if (!complete)
                    GameLoop();
+               }
            } else {
                _GameView.GuiMovement(Hero, _directionTextField, MainFrame);
            }

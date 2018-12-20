@@ -12,17 +12,17 @@ public class View {
     public static JPanel _MenuPanel = new JPanel();
 
     public View(Boolean console, JFrame _Frame) {
-        _MenuPanel.setBounds(250, 0, 300, 200);
-        _MenuPanel.setBackground(java.awt.Color.gray);
         if (console) {
             System.out.println("[ Swingy ]: Welcome to Swingy!");
         } else {
+            _MenuPanel.setBounds(250, 0, 300, 200);
+            _MenuPanel.setBackground(java.awt.Color.gray);
 //            JLabel _welcomeLabel = new JLabel("Welcome to Swingy");
 //            _welcomeLabel.setBounds(300, 10, 300, 30);
 //
 //            _MenuPanel.add(_welcomeLabel);
+            _Frame.add(_MenuPanel);
         }
-        _Frame.add(_MenuPanel);
     }
 
     public int ConsoleMenu(Integer heroCount) {

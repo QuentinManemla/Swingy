@@ -11,7 +11,7 @@ public class HeroView {
     }
 
     public void displayHero(Hero _hero) {
-        System.out.println("Hero ID|  Hero Name | Hero Class | Level | Experience | Attack | Defense | HitPoints");
+        System.out.println("ID| Name | Class | Level | Xp | Attack | Defense | HitPoints");
         System.out.println(_hero.getId() + " | " + _hero.getName() + " | " + _hero.getHeroClass() +
                 " | " + _hero.getLevel() + " | " + _hero.getExperience() + " | " + _hero.getAttack() +
                 " | " + _hero.getDefense() + " | " + _hero.getHitPoints());

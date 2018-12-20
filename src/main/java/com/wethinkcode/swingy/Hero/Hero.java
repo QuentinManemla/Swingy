@@ -1,5 +1,7 @@
 package com.wethinkcode.swingy.Hero;
 
+import com.wethinkcode.swingy.Artifact.Artifact;
+
 public class Hero {
     private Integer Id = 0;
     private String Name;
@@ -9,6 +11,7 @@ public class Hero {
     private Integer Attack = 0;
     private Integer Defense = 0;
     private Integer HitPoints = 0;
+    public Artifact HeroArtifact = null;
 
     public Hero() {}
 
@@ -74,5 +77,9 @@ public class Hero {
 
     public void setLevel(int level) {
         this.Level = level;
+    }
+
+    public void setDefense(Integer defense) {
+        Defense = defense;
     }
 }
