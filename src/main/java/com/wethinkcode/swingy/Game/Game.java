@@ -1,6 +1,7 @@
 package com.wethinkcode.swingy.Game;
 
 import com.wethinkcode.swingy.Hero.Hero;
+import com.wethinkcode.swingy.Hero.HeroController;
 import sun.tools.jar.Main;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ import java.util.Random;
 @SuppressWarnings("IntegerDivisionInFloatingPointContext")
 public class Game {
     private static GameView _GameView = new GameView();
+    private static HeroController _HeroController = new HeroController();
     private static BufferedReader _bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     private static JFrame MainFrame;
     private static Boolean Console;
@@ -94,28 +96,6 @@ public class Game {
         complete = false;
     }
 
-    private void win() {
-
-    }
-
-    private void enemyFight() {
-        Random rand = new Random();
-
-        int enemyAttack = Hero.getLevel() + 2;
-
-        if (Hero.getDefense() > 1)
-            enemyAttack += (Hero.getDefense() / 2);
-        if (Hero.getAttack() > 1)
-            enemyAttack += (Hero.getAttack() / 2);
-
-        if (rand.nextInt(100) < 75) {
-            win();
-        } else {
-            System.out.println("Death");
-        }
-        System.out.println("Enemy Attack = " + enemyAttack);
-    }
-
     private void enemyCollision() {
         System.out.println("[Swingy :] You have Come in Contact with an Enemy, You have two options");
         System.out.print("1: Run\n2: Fight\n");
@@ -127,7 +107,11 @@ public class Game {
             if (choice.equals(1)) {
 
             } else if (choice.equals(2))
-                enemyFight();
+                _HeroController.HeroFight(Hero);
+            else if (!choice.equals(1) || !choice.equals(2)) {
+                System.out.println("[Swingy] Unknown Option Given [Game - Enemy Collision]");
+                enemyCollision();
+            }
         } catch ( IOException ex ) {
             System.out.println("[Swingy] IO Exception [Game - Enemy Collision]");
             enemyCollision();

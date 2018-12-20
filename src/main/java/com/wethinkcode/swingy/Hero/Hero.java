@@ -39,6 +39,7 @@ public class Hero {
     }
 
     public Integer getId() { return Id; }
+
     public String getName() {
         return Name;
     }
@@ -61,5 +62,17 @@ public class Hero {
 
     public Integer getHitPoints() {
         return HitPoints;
+    }
+
+    public void setHitPoints(int hitPoints) {
+        this.HitPoints = hitPoints;
+    }
+
+    public void setExperience(int experience) {
+        this.Experience = experience;
+    }
+
+    public void setLevel(int level) {
+        this.Level = level;
     }
 }

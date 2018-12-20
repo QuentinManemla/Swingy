@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Random;
 
 public class HeroController {
     public static HeroView _HeroView = new HeroView();
@@ -77,6 +78,35 @@ public class HeroController {
             previousHero(_database, _console, _MainFrame, _heroIdField);
         }
         return null;
+    }
+
+    public boolean upgradeHero(Hero _Hero) {
+        int neededXp = _Hero.getLevel() * 1000 + (int)Math.pow(_Hero.getLevel()  - 1, 2) * 450;
+
+        if (_Hero.getExperience() >= neededXp) {
+            _Hero.setLevel(_Hero.getLevel() + 1);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean HeroFight(Hero _Hero) {
+        Random rand = new Random();
+
+        int enemyAttack = _Hero.getLevel() + 2;
+
+        if (_Hero.getDefense() > 1)
+            enemyAttack += (_Hero.getDefense() / 2);
+        if (_Hero.getAttack() > 1)
+            enemyAttack += (_Hero.getAttack() / 2);
+
+        if (rand.nextInt(100) < 75) {
+            _Hero.setExperience(_Hero.getExperience() + (enemyAttack * 100));
+            upgradeHero(_Hero);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void removePanel(JFrame MainFrame) {

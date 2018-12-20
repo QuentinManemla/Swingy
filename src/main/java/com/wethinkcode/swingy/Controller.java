@@ -1,8 +1,9 @@
-package com.wethinkcode.swingy.View;
+package com.wethinkcode.swingy;
 import com.wethinkcode.swingy.Database.Database;
 import com.wethinkcode.swingy.Game.Game;
 import com.wethinkcode.swingy.Hero.Hero;
 import com.wethinkcode.swingy.Hero.HeroController;
+import com.wethinkcode.swingy.View.View;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
