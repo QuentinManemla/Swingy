@@ -1,8 +1,12 @@
 package com.wethinkcode.swingy.Database;
 
 /* Imports */
+import com.wethinkcode.swingy.Hero.Hero;
+
 import java.sql.*;
 import java.math.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private String Url = "jdbc:mysql://db4free.net:3306/qmanamelswingy";
@@ -24,17 +28,67 @@ public class Database {
         }
     }
 
-    public void addHero() {
+    public List<Hero> getHeroes() {
         PreparedStatement pstmt = null;
         try {
             String SQL = "SELECT * FROM heroes";
             pstmt = this.Con.prepareStatement(SQL);
 
+            List<Hero> heroes = new ArrayList<Hero>();
+
             ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                heroes.add(new Hero(rs.getInt(1), rs.getString(2),rs.getString(3), rs.getInt(4),
+                        rs.getInt(5),rs.getInt(6),
+                        rs.getInt(7), rs.getInt(8) ));
+            }
+            return (heroes);
         } catch (SQLException ex) {
             System.out.println("Error: unable to Run Prepared Statement!");
             System.exit(1);
         }
+        return null;
+    }
+
+    public void updateHero(Hero _Hero) {
+        PreparedStatement pstmt = null;
+        try {
+            String SQL = "UPDATE heroes SET level = ? ,experience = ?, attack = ?, defense = ?, hitpoints = ? WHERE id  = ?";
+            pstmt = this.Con.prepareStatement(SQL);
+            pstmt.setInt(1, _Hero.getLevel());
+            pstmt.setInt(2, _Hero.getExperience());
+            pstmt.setInt(3, _Hero.getAttack());
+            pstmt.setInt(4, _Hero.getDefense());
+            pstmt.setInt(5, _Hero.getHitPoints());
+            pstmt.setInt(6, _Hero.getId());
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Error: unable to Run Prepared Statement: " + ex);
+            System.exit(1);
+        }
+    }
+    public Hero getHero(Integer _heroId) {
+        PreparedStatement pstmt = null;
+        try {
+            String SQL = "SELECT * FROM heroes WHERE id = " + _heroId;
+            pstmt = this.Con.prepareStatement(SQL);
+            ResultSet rs = pstmt.executeQuery();
+
+            rs.next();
+            if (rs.getRow() > 0) {
+                return new Hero(rs.getInt(1), rs.getString(2),rs.getString(3),
+                        rs.getInt(4), rs.getInt(5),rs.getInt(6),
+                        rs.getInt(7), rs.getInt(8) );
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: unable to Run Prepared Statement!");
+            System.exit(1);
+        }
+        return null;
     }
 
     public int countHeroes() {

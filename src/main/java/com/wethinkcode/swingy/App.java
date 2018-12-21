@@ -1,8 +1,5 @@
 package com.wethinkcode.swingy;
 
-import com.wethinkcode.swingy.Database.Database;
-import com.wethinkcode.swingy.View.Controller;
-
 /**
  * Main App Class
  */
